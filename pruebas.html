@@ -1,0 +1,117 @@
+<footer>
+    <div class="footer">
+        <div id="button"></div>
+        <div id="container">
+
+            <div class="row ">
+                <div class=" col-12 col-md-4 text-center ">
+                    <img src="./imagen/logo_footer.png" alt="logo_footer">
+                    <p class="name"> <i class="bi bi-geo-alt"></i>Merlo, Provincia de Buenos Aires, Argentina
+                    </p>
+                    <p class="name"> <i class="bi bi-telephone"></i>(+54) 9 11 2268 1597</p>
+                </div>
+                <div class=" col-12 col-md-4 text-center ">
+                    <p class="name">Seguinos en </p>
+                    <a class=" social" href="https://www.instagram.com/camizandri.pasteleria/?hl=es"><i
+                            class="bi bi-instagram"></i></a>
+                    <a class=" social" href="https://www.youtube.com/channel/UCoGu1YIzhJwGc2mn35DY3DA"><i
+                            class="bi bi-youtube"></i></a>
+                    <p class="name"> Cami Zandri &copy; 2021</p>
+                </div>
+                <div class=" col-12 col-md-4 text-center mt-1">
+                    <p class="name"> From Morgade Juan Pablo</p>
+                    <img src="./imagen/Logo-Ideas-sin 2.png" alt="logo_empresa">
+                    <p class="name"> <i class="bi bi-geo-alt"></i> Persikogatan 34, Hässelby Strand, Stockholm
+                    </p>
+                    <p class="name"> <i class="bi bi-telephone"></i> (+64) 0 70 033 43 82</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<footer>
+
+    <div class="container_footer">
+        <div class="info_foot">
+            
+            <div class="inf_fot">
+                <img src="./imagen/logo_footer.png" alt="logo_footer">
+                <p class="name"> <i class="bi bi-geo-alt"></i>Merlo, Provincia de Buenos Aires, Argentina</p>
+                <p class="name"> <i class="bi bi-telephone"></i>(+54) 9 11 2268-1597</p>
+            </div>
+        </div>
+  
+        <div class="info_foot">
+            <h2>NAVEGACION</h2>
+            <a class="navegacion__link" href="index.html">Inicio</a>
+            <a class="navegacion__link" href="presupuesto.html">Presupuesto</a>
+            <a class="navegacion__link" href="conoceme.html">Conoceme</a>
+            <a class="navegacion__link" href="productos.html">Mis Productos</a>
+            <a class="navegacion__link" href="cursos.html">Cursos</a>
+            <a class="navegacion__link" href="carrito.html">Mi Carrito</a>               
+        </div>
+        
+        <div class="info_foot">
+          <h2>REDES SOCIALES</h2>
+          <a href="https://www.facebook.com/elfaunopasteleria" target="_blank"> <i class="fab fa-facebook-square"></i> Facebook</a>
+          <a href="https://www.youtube.com/channel/UCoGu1YIzhJwGc2mn35DY3DA" target="_blank"><i class="bi bi-youtube"></i></i> YouTube</a>
+          <a href="https://www.instagram.com/camizandri.pasteleria/?hl=es" target="_blank"><i class="fab fa-instagram-square"></i> Instagram</a>
+      </div>
+  
+    </div>
+  
+    <div class="copy">
+        <hr>
+        <p>Todos los derechos reservados © 2022 <b>Juan Pablo Morgade</b></p>
+    </div>
+  </footer>
+
+<?php
+  require __DIR__.'/vendor/autoload.php';
+  $access_token='APP_USR-3168818756642413-090815-171faf2a13cf47d120f04416ece74592-1194761399';
+  MercadoPago\SDK::setAccessToken($access_token);
+  $preference = new MercadoPago\preference();
+  $preference->back_urls=array(
+          "success"=>"http://localhost/Sistema-ecommerce/correcto.php",
+          "failure"=>"http://localhost/Sistema-ecommerce/fail.php",
+          "pending"=>"http://localhost/Sistema-ecommerce/fail.php"
+      );
+
+          $productos=[];
+          $item=new MercadoPago\item();
+          $item->title="CURSOS DE PASTELERIA";
+          $item->quantity=1;
+          $item->unit_price= 53;
+          array_push($productos,$item);
+
+          $preference->items=$productos;
+          $preference->save();
+?>
+
+
+  <script>
+    $(document).ready(function(){
+			$.ajax({
+				url:'servicios/pedidos/get_por_procesar.php',
+				type:'POST',
+				data:{},
+				success:function(data){
+					console.log(data);
+                    let montototal=0;
+					
+					for (var i = 0; i < data.datos.length; i++) {
+						if (data.datos[i].estado=="1") {
+							montototal+=parseFloat(data.datos[i].prepro);
+						}
+                        
+					}
+				},
+				error:function(err){
+					console.error(err);
+				}
+                
+			});
+		});
+  </script>
